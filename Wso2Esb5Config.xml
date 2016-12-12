@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://ws.apache.org/ns/synapse">
+    <registry provider="org.wso2.carbon.mediation.registry.WSO2Registry">
+        <parameter name="cachableDuration">0</parameter>
+    </registry>
+    <taskManager provider="org.wso2.carbon.mediation.ntask.NTaskTaskManager"/>
+    <proxy name="ticket.accounting.Service" serviceGroup="TA"
+        startOnLoad="true" statistics="enable" trace="enable" transports="http https">
+        <target>
+            <inSequence>
+                <log level="custom" separator=",">
+                    <property name="ticket.accounting.Service" value="Ticket Accounting Service started."/>
+                </log>
+                <call-template description="PreCondEsbSequence" target="ticket.accounting.PreCondEsbSequence">
+                    <with-param name="ArgSchema" value="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingRecords-v1_1.xsd"/>
+                    <with-param name="ArgResource" value="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingBase-v1_1.xsd"/>
+                    <with-param name="ArgLocation" value="TicketAccountingBase-v1_1.xsd"/>
+                </call-template>
+                <call-template description="XsltMappingSequence" target="esb.common.XsltMappingSequence">
+                    <with-param name="ArgXslt" value="gov:bls/esb/TicketAccounting/esb/transform/TicketAccounting-v1_1.xsl"/>
+                </call-template>
+                <call-template description="BasicAuthSequence" target="esb.common.BasicAuthSequence">
+                    <with-param name="ArgUsersRegistryPath" value="conf:bls/esb/TicketAccounting/sap/users/ServiceUsers.xml"/>
+                    <with-param name="ArgUserType" value="SapServiceUser"/>
+                </call-template>
+                <call-template description="PostCondSap" target="ticket.accounting.PostCondSapSequence">
+                    <with-param name="ArgSchema" value="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbComplex.xsd"/>
+                    <with-param name="ArgResource" value="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbSimple.xsd"/>
+                </call-template>
+                <log>
+                    <property name="ticket.accounting.Service" value="Message Sent."/>
+                </log>
+                <send>
+                    <endpoint key="gov:bls/esb/TicketAccounting/sap/endpoints/TicketAccountingSapEndpoint.xml"/>
+                </send>
+            </inSequence>
+            <outSequence>
+                <log category="DEBUG" level="full"/>
+                <send/>
+            </outSequence>
+            <faultSequence>
+                <log category="ERROR" level="custom">
+                    <property name="text" value="Fault Sequence called."/>
+                    <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+                    <property expression="get-property('ERROR_CODE')" name="code"/>
+                    <property expression="get-property('ERROR_DETAIL')" name="detail"/>
+                    <property
+                        expression="get-property('ERROR_EXCEPTION')" name="exception"/>
+                </log>
+                <send/>
+            </faultSequence>
+        </target>
+        <publishWSDL key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingService-v1_1.wsdl">
+            <resource
+                key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingRecords-v1_1.xsd" location="TicketAccountingRecords-v1_1.xsd"/>
+            <resource
+                key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingBase-v1_1.xsd" location="TicketAccountingBase-v1_1.xsd"/>
+        </publishWSDL>
+    </proxy>
+    <proxy name="ticket.accounting.ServiceLoopback" serviceGroup="TA"
+        startOnLoad="true" statistics="enable" trace="enable" transports="http https">
+        <target>
+            <inSequence>
+                <log level="custom" separator=",">
+                    <property name="ticket.accounting.ServiceLoopback" value="Ticket Accounting Loopback Service started."/>
+                </log>
+                <respond/>
+            </inSequence>
+            <outSequence>
+                <log level="full"/>
+                <send/>
+            </outSequence>
+            <faultSequence/>
+        </target>
+        <publishWSDL key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingService-v1_1.wsdl">
+            <resource
+                key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingRecords-v1_1.xsd" location="TicketAccountingRecords-v1_1.xsd"/>
+            <resource
+                key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingBase-v1_1.xsd" location="TicketAccountingBase-v1_1.xsd"/>
+        </publishWSDL>
+    </proxy>
+    <proxy name="ticket.accounting.common.SFService" serviceGroup="TA"
+        startOnLoad="true" statistics="enable" trace="enable" transports="http https">
+        <target>
+            <inSequence>
+                <log level="custom" separator=",">
+                    <property name="ticket.accounting.SFService" value="Ticket Accounting Store and Forward Service started."/>
+                </log>
+                <call-template description="PreCondEsbSequence" target="ticket.accounting.PreCondEsbSequence">
+                    <with-param name="ArgSchema" value="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingRecords-v1_1.xsd"/>
+                    <with-param name="ArgResource" value="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingBase-v1_1.xsd"/>
+                    <with-param name="ArgLocation" value="TicketAccountingBase-v1_1.xsd"/>
+                </call-template>
+                <call-template description="XsltMappingSequence" target="esb.common.XsltMappingSequence">
+                    <with-param name="ArgXslt" value="gov:bls/esb/TicketAccounting/esb/transform/TicketAccounting-v1_1.xsl"/>
+                </call-template>
+                <call-template description="BasicAuthSequence" target="esb.common.BasicAuthSequence">
+                    <with-param name="ArgUsersRegistryPath" value="conf:bls/esb/TicketAccounting/sap/users/ServiceUsers.xml"/>
+                    <with-param name="ArgUserType" value="SapServiceUser"/>
+                </call-template>
+                <call-template description="PostCondSap" target="ticket.accounting.PostCondSapSequence">
+                    <with-param name="ArgSchema" value="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbComplex.xsd"/>
+                    <with-param name="ArgResource" value="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbSimple.xsd"/>
+                </call-template>
+                <store description="SapMessageStore" messageStore="ticket.accounting.SapMessageStore"/>
+                <log level="custom">
+                    <property name="ticket.accounting.SFService" value="Message sent to the store."/>
+                </log>
+                <respond/>
+            </inSequence>
+            <outSequence/>
+            <faultSequence>
+                <log category="ERROR" level="custom">
+                    <property name="text" value="Fault Sequence called."/>
+                    <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+                    <property expression="get-property('ERROR_CODE')" name="code"/>
+                    <property expression="get-property('ERROR_DETAIL')" name="detail"/>
+                    <property
+                        expression="get-property('ERROR_EXCEPTION')" name="exception"/>
+                </log>
+                <send/>
+            </faultSequence>
+        </target>
+        <publishWSDL key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingService-v1_1.wsdl">
+            <resource
+                key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingRecords-v1_1.xsd" location="TicketAccountingRecords-v1_1.xsd"/>
+            <resource
+                key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingBase-v1_1.xsd" location="TicketAccountingBase-v1_1.xsd"/>
+        </publishWSDL>
+    </proxy>
+    <sequence name="ticket.accounting.FileSequence" onError="TicketAccountingFileErrorSequence">
+        <log level="custom" separator=",">
+            <property name="ticket.accounting.FileSequence" value="Ticket Accounting File Sequence called."/>
+        </log>
+        <smooks config-key="gov:bls/esb/TicketAccounting/esb/transform/VbeTicketCsvSmooks.xml">
+            <input type="text"/>
+            <output type="xml"/>
+        </smooks>
+        <property name="messageType" scope="axis2" type="STRING" value="text/xml"/>
+        <property name="TRANSPORT_IN_NAME" scope="default" type="STRING" value="http"/>
+        <call-template description="BasicAuthSequence" target="esb.common.BasicAuthSequence">
+            <with-param name="ArgUsersRegistryPath" value="conf:bls/esb/TicketAccounting/sap/users/ServiceUsers.xml"/>
+            <with-param name="ArgUserType" value="SapServiceUser"/>
+        </call-template>
+        <log level="full"/>
+        <validate>
+            <schema key="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbComplex.xsd"/>
+            <resource
+                key="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbSimple.xsd" location="vbe2esbSimple.xsd"/>
+            <on-fail>
+                <log category="ERROR" level="custom">
+                    <property expression="$ctx:ERROR_MESSAGE" name="INPUT VALIDATION FAILED"/>
+                </log>
+                <makefault version="soap11">
+                    <code value="soap11Env:Client" xmlns:soap11Env="http://schemas.xmlsoap.org/soap/envelope/"/>
+                    <reason expression="$ctx:ERROR_MESSAGE"/>
+                    <detail>Look at "vbe2esbComplex.xsd"</detail>
+                </makefault>
+                <send/>
+            </on-fail>
+        </validate>
+        <log level="custom" separator=",">
+            <property name="ticket.accounting.FileSequence" value="Message sent."/>
+        </log>
+        <call>
+            <endpoint key="gov:bls/esb/TicketAccounting/sap/endpoints/TicketAccountingSapEndpoint.xml"/>
+        </call>
+        <!-- NOT WORKING YET -->
+        <property expression="processed.xml"
+            name="transport.vfs.ReplyFileName" scope="transport" type="STRING"/>
+        <property name="OUT_ONLY" scope="default" type="STRING" value="true"/>
+        <log level="custom" separator=",">
+            <property name="ticket.accounting.FileSequence" value="Leaving Ticket Accounting File Sequence"/>
+        </log>
+    </sequence>
+    <sequence name="ticket.accounting.MsgProcFault">
+        <log category="ERROR" level="custom">
+            <property name="ticket.accounting.MsgProcFault" value="Message Fault Sequence called."/>
+        </log>
+        <log category="ERROR" level="full">
+            <property name="text" value="An unexpected error occured"/>
+            <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+            <property expression="get-property('ERROR_CODE')" name="code"/>
+            <property expression="get-property('ERROR_DETAIL')" name="detail"/>
+            <property expression="get-property('ERROR_EXCEPTION')" name="exception"/>
+        </log>
+        <!--     <sequence key="SendMailSequence"/> -->
+        <drop/>
+    </sequence>
+    <sequence name="SendMailSequence">
+        <log category="DEBUG" level="custom">
+            <property name="STATUS" value="SendMailSequence"/>
+        </log>
+        <property name="messageType" scope="axis2" type="STRING" value="text/html"/>
+        <property name="ContentType" scope="axis2" type="STRING" value="text/html"/>
+        <property name="Subject" scope="transport" type="STRING" value="WSO2 ESB: Could not send stored message to SAP BI [Service: EBSSAPCAR]. Communication Error or Message Processor deactivated."/>
+        <property name="OUT_ONLY" scope="default" type="STRING" value="true"/>
+        <!-- <send>
+    <endpoint name="MailEpr">
+      <address trace="disable" uri="mailto:robert.wydler@bls.ch"/>
+    </endpoint>
+  </send> -->
+    </sequence>
+    <sequence name="ticket.accounting.MsgProcReplied">
+        <log level="custom">
+            <property name="ticket.accounting.MsgProcReplied" value="Message Reply Sequence called."/>
+        </log>
+        <log category="DEBUG" level="full"/>
+        <drop/>
+    </sequence>
+    <sequence name="ticket.accounting.FileErrorSequence">
+        <log level="custom" separator=",">
+            <property name="ticket.accounting.FileErrorSequence" value="Ticket Accounting File Error Sequence called."/>
+        </log>
+        <log category="ERROR" level="custom">
+            <property name="text" value="Fault Sequence called."/>
+            <property expression="get-property('ERROR_MESSAGE')" name="message"/>
+            <property expression="get-property('ERROR_CODE')" name="code"/>
+            <property expression="get-property('ERROR_DETAIL')" name="detail"/>
+            <property expression="get-property('ERROR_EXCEPTION')" name="exception"/>
+        </log>
+        <drop/>
+    </sequence>
+    <sequence name="ticket.accounting.MsgProcDeactivated">
+        <log category="WARN" level="custom">
+            <property name="ticket.accounting.MsgProcDeactivated" value="Message Deactivate Sequence called."/>
+        </log>
+        <log category="DEBUG" level="full"/>
+        <sequence key="SendMailSequence"/>
+        <drop/>
+    </sequence>
+    <sequence name="fault">
+        <!-- Log the message at the full log level with the ERROR_MESSAGE and the ERROR_CODE-->
+        <log level="full">
+            <property name="MESSAGE" value="Executing default 'fault' sequence"/>
+            <property expression="get-property('ERROR_CODE')" name="ERROR_CODE"/>
+            <property expression="get-property('ERROR_MESSAGE')" name="ERROR_MESSAGE"/>
+        </log>
+        <!-- Drops the messages by default if there is a fault -->
+        <drop/>
+    </sequence>
+    <sequence name="main">
+        <in>
+            <!-- Log all messages passing through -->
+            <log level="full"/>
+            <!-- ensure that the default configuration only sends if it is one of samples -->
+            <!-- Otherwise Synapse would be an open proxy by default (BAD!)               -->
+            <filter regex="http://localhost:9000.*" source="get-property('To')">
+                <!-- Send the messages where they have been sent (i.e. implicit "To" EPR) -->
+                <send/>
+            </filter>
+        </in>
+        <out>
+            <send/>
+        </out>
+        <description>The main sequence for the message mediation</description>
+    </sequence>
+    <template name="ticket.accounting.PostCondSapSequence">
+        <parameter name="ArgSchema"/>
+        <parameter name="ArgResource"/>
+        <parameter name="ArgLocation"/>
+        <sequence>
+            <log level="custom" separator=",">
+                <property name="ticket.accounting.PostCondSapSequence" value="ticket.accounting.PostCondSapSequence"/>
+            </log>
+            <property expression="$func:ArgSchema" name="xsdSchema"
+                scope="axis2" type="STRING"/>
+            <property expression="$func:ArgResource" name="xsdResource"
+                scope="axis2" type="STRING"/>
+            <property expression="$func:ArgLocation" name="xsdLocation"
+                scope="axis2" type="STRING"/>
+            <log level="custom" separator="; ">
+                <property expression="get-property('axis2','xsdSchema')" name="xsdSchema"/>
+                <property
+                    expression="get-property('axis2','xsdResource')" name="xsdResource"/>
+                <property
+                    expression="get-property('axis2','xsdLocation')" name="xsdLocation"/>
+            </log>
+            <!-- ToDo: rwy & WSO2 resource key=variable -->
+            <validate>
+                <schema key="{$axis2:xsdSchema}"/>
+                <resource
+                    key="gov:bls/esb/TicketAccounting/sap/wsdl/vbe2esbSimple.xsd" location="vbe2esbSimple.xsd"/>
+                <on-fail>
+                    <log category="ERROR" level="custom">
+                        <property expression="$ctx:ERROR_MESSAGE" name="INPUT VALIDATION FAILED"/>
+                    </log>
+                    <makefault version="soap11">
+                        <code value="soap11Env:Client" xmlns:soap11Env="http://schemas.xmlsoap.org/soap/envelope/"/>
+                        <reason expression="$ctx:ERROR_MESSAGE"/>
+                        <detail>Look at "vbe2esbComplex.xsd"</detail>
+                    </makefault>
+                    <send/>
+                </on-fail>
+            </validate>
+        </sequence>
+    </template>
+    <template name="esb.common.BasicAuthSequence">
+        <parameter name="ArgUsersRegistryPath"/>
+        <parameter name="ArgUserType"/>
+        <sequence>
+            <log level="custom" separator=",">
+                <property name="esb.common.BasicAuthSequence" value="HTTP Basic Authentication Started."/>
+            </log>
+            <property
+                expression="get-property('registry',$func:ArgUsersRegistryPath)"
+                name="serviceUsers" scope="default" type="OM"/>
+            <log category="DEBUG" level="custom">
+                <property
+                    expression="get-property('default','serviceUsers')" name="Service Users"/>
+            </log>
+            <property expression="$func:ArgUserType" name="argUserType"
+                scope="default" type="STRING"/>
+            <property
+                expression="fn:concat('$ctx:serviceUsers','//',get-property('default','argUserType'))"
+                name="XPath" scope="default" type="STRING"/>
+            <log category="DEBUG" level="custom">
+                <property expression="get-property('XPath')" name="XPath"/>
+            </log>
+            <!-- rwy ==> Not nice, yet ! -->
+            <property expression="$ctx:serviceUsers//SapServiceUser"
+                name="serviceUser" scope="axis2" type="STRING"/>
+            <log level="custom">
+                <property
+                    expression="get-property('axis2','serviceUser')" name="Service User"/>
+            </log>
+            <property
+                expression="wso2:vault-lookup(get-property('axis2','serviceUser'))"
+                name="password" scope="axis2" type="STRING"/>
+            <property
+                expression="fn:concat(get-property('axis2','serviceUser'),':',get-property('axis2','password'))"
+                name="authorizationValue" scope="axis2" type="STRING"/>
+            <log category="DEBUG" level="custom">
+                <property
+                    expression="get-property('axis2','authorizationValue')" name="authorizationValue"/>
+            </log>
+            <log category="DEBUG" level="custom">
+                <property
+                    expression="fn:concat('Basic ', base64Encode(get-property('axis2','authorizationValue')))" name="Authorization Code"/>
+            </log>
+            <property
+                expression="fn:concat('Basic ', base64Encode(get-property('axis2','authorizationValue')))"
+                name="Authorization" scope="transport" type="STRING"/>
+            <property name="POST_TO_URI" scope="axis2" type="STRING" value="true"/>
+            <header name="Action" scope="default" value="urn:sap-com:document:sap:soap:functions:mc-style:_-BIC_-CQZ_TEST_00001000:_-bic_-cqzTest00001000Request"/>
+            <log level="custom" separator=",">
+                <property name="esb.common.BasicAuthSequence" value="HTTP Action Header added."/>
+            </log>
+        </sequence>
+    </template>
+    <template name="ticket.accounting.PreCondEsbSequence">
+        <parameter name="ArgSchema"/>
+        <parameter name="ArgResource"/>
+        <parameter name="ArgLocation"/>
+        <sequence>
+            <log level="custom" separator=",">
+                <property name="ticket.accounting.PreCondEsbSequence" value="Pre Condition for ESB Input started."/>
+            </log>
+            <property expression="$func:ArgSchema" name="xsdSchema"
+                scope="axis2" type="STRING"/>
+            <property expression="$func:ArgResource" name="xsdResource"
+                scope="axis2" type="STRING"/>
+            <property expression="$func:ArgLocation" name="xsdLocation"
+                scope="axis2" type="STRING"/>
+            <log level="custom" separator="; ">
+                <property expression="get-property('axis2','xsdSchema')" name="xsdSchema"/>
+                <property
+                    expression="get-property('axis2','xsdResource')" name="xsdResource"/>
+                <property
+                    expression="get-property('axis2','xsdLocation')" name="xsdLocation"/>
+            </log>
+            <!-- ToDo: rwy & WSO2 resource key=variable -->
+            <validate>
+                <schema key="{$axis2:xsdSchema}"/>
+                <resource
+                    key="gov:bls/esb/TicketAccounting/esb/wsdl/TicketAccountingBase-v1_1.xsd" location="TicketAccountingBase-v1_1.xsd"/>
+                <on-fail>
+                    <log category="ERROR" level="custom">
+                        <property expression="$ctx:ERROR_MESSAGE" name="INPUT VALIDATION FAILED"/>
+                    </log>
+                    <makefault version="soap11">
+                        <code value="soap11Env:Client" xmlns:soap11Env="http://schemas.xmlsoap.org/soap/envelope/"/>
+                        <reason expression="$ctx:ERROR_MESSAGE"/>
+                        <detail>Look at "TicketAccountingRecords-v1_1.xsd" and
+						"TicketAccountingBase-v1_1.xsd"</detail>
+                    </makefault>
+                    <send/>
+                    <!--             <schema key="{$func:ArgSchema}"/> -->
+                </on-fail>
+            </validate>
+        </sequence>
+    </template>
+    <template name="esb.common.XsltMappingSequence">
+        <parameter name="ArgXslt"/>
+        <sequence>
+            <log level="custom" separator=",">
+                <property name="esb.common.XsltMappingSequence" value="XSLT Transformation started."/>
+            </log>
+            <property expression="$func:ArgXslt" name="xslt"
+                scope="default" type="STRING"/>
+            <log level="custom" separator="; ">
+                <property expression="get-property('xslt')" name="xslt"/>
+            </log>
+            <xslt key="{$func:ArgXslt}"/>
+            <log level="full"/>
+        </sequence>
+    </template>
+    <messageStore
+        class="org.apache.synapse.message.store.impl.jdbc.JDBCMessageStore" name="ticket.accounting.SapMessageStore">
+        <parameter name="store.producer.guaranteed.delivery.enable">false</parameter>
+        <parameter name="store.jdbc.password">7IsCVB8b</parameter>
+        <parameter name="store.jdbc.username">wso2dev_owner</parameter>
+        <parameter name="store.jdbc.driver">com.microsoft.sqlserver.jdbc.SQLServerDriver</parameter>
+        <parameter name="store.jdbc.table">TicketAccountingMessageStoreTable</parameter>
+        <parameter name="store.jdbc.connection.url">jdbc:sqlserver://chapf013.ad.bls.ch:1434;databaseName=wso2dev</parameter>
+    </messageStore>
+    <messageProcessor
+        class="org.apache.synapse.message.processor.impl.forwarder.ScheduledMessageForwardingProcessor"
+        messageStore="ticket.accounting.SapMessageStore"
+        name="ticket.accounting.SapMessageProcessor" targetEndpoint="gov:bls/esb/TicketAccounting/sap/endpoints/TicketAccountingSapEndpoint.xml">
+        <parameter name="message.processor.deactivate.sequence">ticket.accounting.MsgProcDeactivated</parameter>
+        <parameter name="max.delivery.drop">Enabled</parameter>
+        <parameter name="message.processor.reply.sequence">ticket.accounting.MsgProcReplied</parameter>
+        <parameter name="max.delivery.attempts">1</parameter>
+        <parameter name="client.retry.interval">5000</parameter>
+        <parameter name="interval">5000</parameter>
+        <parameter name="member.count">1</parameter>
+        <parameter name="throttle">false</parameter>
+        <parameter name="target.endpoint">gov:bls/esb/TicketAccounting/sap/endpoints/TicketAccountingSapEndpoint.xml</parameter>
+        <parameter name="non.retry.status.codes">304, 305</parameter>
+        <parameter name="message.processor.fault.sequence">ticket.accounting.MsgProcFault</parameter>
+        <parameter name="is.active">true</parameter>
+    </messageProcessor>
+    <!-- You can add any flat sequences, endpoints, etc.. to this synapse.xml file if you do
+    *not* want to keep the artifacts in several files -->
+    <inboundEndpoint name="ticket.accounting.FileInboundEndpoint"
+        onError="ticket.accounting.FileErrorSequence" protocol="file"
+        sequence="ticket.accounting.FileSequence" statistics="enable"
+        suspend="false" trace="enable">
+        <parameters>
+            <parameter name="interval">5000</parameter>
+            <parameter name="sequential">true</parameter>
+            <parameter name="coordination">true</parameter>
+            <parameter name="transport.vfs.ContentType">text/plain</parameter>
+            <parameter name="transport.vfs.LockReleaseSameNode">false</parameter>
+            <parameter name="transport.vfs.AutoLockRelease">false</parameter>
+            <parameter name="transport.vfs.ActionAfterFailure">MOVE</parameter>
+            <parameter name="transport.vfs.MaxRetryCount">1</parameter>
+            <parameter name="transport.vfs.ActionAfterProcess">MOVE</parameter>
+            <parameter name="transport.vfs.FileURI">file://E:/rwyData/TicketAccountingCsvFiles/IN</parameter>
+            <parameter name="transport.vfs.MoveAfterFailure">file://E:/rwyData/TicketAccountingCsvFiles/FAIL</parameter>
+            <parameter name="transport.vfs.MoveTimestampFormat">yyyy-MM-dd-HH-mm-ss_</parameter>
+            <parameter name="transport.vfs.DistributedLock">false</parameter>
+            <parameter name="transport.vfs.FileNamePattern">.*\.csv</parameter>
+            <parameter name="transport.vfs.MoveAfterProcess">file://E:/rwyData/TicketAccountingCsvFiles/PROCESSED</parameter>
+            <parameter name="transport.vfs.Locking">disable</parameter>
+            <parameter name="transport.vfs.FileSortAttribute">none</parameter>
+            <parameter name="transport.vfs.FileSortAscending">false</parameter>
+            <parameter name="transport.vfs.CreateFolder">true</parameter>
+            <parameter name="transport.vfs.Streaming">false</parameter>
+            <parameter name="transport.vfs.Build">false</parameter>
+        </parameters>
+    </inboundEndpoint>
+</definitions>
