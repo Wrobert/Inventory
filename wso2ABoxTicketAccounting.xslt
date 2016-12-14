@@ -10,7 +10,7 @@
 		xmlns:core-soa="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#"
 		xmlns:tbox="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#"
 		>
-	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes"/>
+	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="application/rdf+xml"/>
 	<xsl:template match="/wso2:definitions">
 		<rdf:RDF xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#"
 			xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#"
@@ -45,6 +45,7 @@
 			</rdf:Description>
 		</rdf:RDF>
 	</xsl:template>
+
 	<!-- Assert individuals -->
 	<xsl:template match="*">
 		<!-- Prepare the new class name  -->
