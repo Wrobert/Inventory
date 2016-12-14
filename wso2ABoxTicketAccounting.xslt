@@ -14,22 +14,62 @@
 	</xsl:template>
 
 	<!-- 1. level indivdual assertion  -->
+	<xsl:template match="//text()" />
 	<xsl:template match="*">
-		<xsl:if test="fn:exists(@name | @description)">
-			<xsl:call-template name="individualTemplate"/>
-		</xsl:if>
+			<xsl:call-template name="selectType"/>
+			<xsl:apply-templates />
+	</xsl:template>
+	<xsl:template match="*/*">
+			<xsl:call-template name="selectType"/>
+			<xsl:apply-templates />
+	</xsl:template>
+	<xsl:template match="*/*/*">
+			<xsl:call-template name="selectType"/>
+			<xsl:apply-templates />
+	</xsl:template>
+	<xsl:template match="*/*/*/*">
+			<xsl:call-template name="selectType"/>
+			<xsl:apply-templates />
+	</xsl:template>
+	<xsl:template match="*/*/*/*/*">
+			<xsl:call-template name="selectType"/>
+	</xsl:template>
+	<xsl:template match="*/*/*/*/*/*">
+			<xsl:call-template name="selectType"/>
+	</xsl:template>
+	
+	<xsl:template name="selectType">
+		<xsl:choose>
+			<xsl:when test="fn:exists(@name)">
+				<xsl:call-template name="individualTemplate">
+					<xsl:with-param name="argType" select="@name"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="fn:exists(@description)">
+				<xsl:call-template name="individualTemplate">
+					<xsl:with-param name="argType" select="@description"/>
+				</xsl:call-template>
+			</xsl:when>
+			<xsl:when test="fn:exists(@key)">
+				<xsl:call-template name="individualTemplate">
+					<xsl:with-param name="argType" select="@key"/>
+				</xsl:call-template>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 
 	<xsl:template name="individualTemplate">
+		<xsl:param name="argType"/>
 		<!-- Prepare the new class name  -->
 		<xsl:variable name="actualName" select="fn:local-name()"/>
 		<xsl:variable name="letter" select="fn:upper-case(fn:substring($actualName,1,1))"/>
 		<xsl:variable name="rest" select="fn:substring ($actualName,2)"/>
 		<xsl:variable name="className" select="fn:concat('#',$letter,$rest,'Class')"/>
+		<xsl:if test="fn:not($argType = ' ') and fn:exists($className)">
 		<!-- Assert the indivuduals to classes  -->
 					<owl:NamedIndividual>
 						<xsl:attribute name="rdf:about">
-							<xsl:value-of select="fn:concat('#',@name)"/>
+							<xsl:value-of select="fn:concat('#',$argType)"/>
 						</xsl:attribute>
 					<rdf:type>
 						<xsl:attribute name="rdf:resource">
@@ -37,5 +77,6 @@
 						</xsl:attribute>
 					</rdf:type>
 				</owl:NamedIndividual>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>
