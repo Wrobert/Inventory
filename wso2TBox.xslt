@@ -32,25 +32,28 @@
 				<rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Element"/>
 				<owl:disjointWith rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Composition"/>
 			</owl:Class>
-			<!-- xsl:comment> === Generated 1. Level Classes === </xsl:comment>
-			<xsl:call-template name="classTemplate" / -->
+			<xsl:comment>  === Generated Classes === </xsl:comment>
 			<xsl:apply-templates/>
 		</rdf:RDF>
 	</xsl:template>
+
 	<!-- 1. level Classes -->
 	<xsl:template match="wso2:definitions">
 		<xsl:call-template name="classTemplate"/>
 		<xsl:apply-templates/>
 	</xsl:template>
+
 	<!-- 2. level Classes -->
 	<xsl:template match="wso2:definitions/*">
 		<xsl:call-template name="classTemplate"/>
 		<xsl:apply-templates/>
 	</xsl:template>
+
 	<!-- 3. level Classes -->
 	<xsl:template match="wso2:definitions/*/*">
 		<xsl:call-template name="classTemplate"/>
 	</xsl:template>
+
 	<!-- Template as Subroutine -->
 	<xsl:template name="classTemplate">
 		<!-- Prepare the super class name list -->
