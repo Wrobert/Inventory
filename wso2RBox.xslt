@@ -24,9 +24,24 @@
 						xmlns:xs="http://www.w3.org/2001/XMLSchema" 
 						xmlns:core-soa="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#"
 						>
-			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/RBoxTicketAccounting">
-				<owl:imports rdf:resource="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTicketAccounting"/>
+			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/RBox">
+				<owl:imports rdf:resource="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABox"/>
 			</owl:Ontology>
+
+		<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/RBox#contains">
+			<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+			<rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#uses"/>
+			<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#TransitiveProperty"/>
+		</rdf:Description>
+		<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/RBox#containedBy">
+			<rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+			<rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#usedBy"/>
+			<owl:inverseOf rdf:resource="http://www.bls.ch/ontologies/ticketAccounting.owl#contains"/>
+		</rdf:Description>
+<!--  -->
+<!-- http://www.bls.ch/ontologies/ticketAccounting.owl#contains -->
+
+
 			
 			<!-- Assert to call-template -->
 			<xsl:comment> === Assert to call-template === </xsl:comment>
@@ -117,6 +132,7 @@
 					</owl:NamedIndividual>
 				</xsl:if>
 			</xsl:for-each>
+			
 			<xsl:for-each select="*/*/wso2:validate/wso2:schema">
 				<xsl:if test="fn:exists(../../../@name)">
 					<!-- Assert individuals to properties -->
