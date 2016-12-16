@@ -8,12 +8,12 @@
 	<xsl:template match="/">
 		<rdf:RDF xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1">
 		<xsl:text/>
-		<xsl:comment> Dublin Core Meta Data</xsl:comment>
+		<xsl:comment> === Dublin Core Meta Data === </xsl:comment>
 		<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBox">
 			<dc:creator>Robert Wydler</dc:creator>
 			<dc:title>WSO2 TBox</dc:title>
-			<dc:description>This is the generated WSO2 TBox out of the WSO2 configuration</dc:description>
-			<dc:date>2016-12-15</dc:date>
+			<dc:description>This is the generated WSO2 TBox based on WSO2 ESB configuration</dc:description>
+			<dc:date>2016-12-16</dc:date>
 		</rdf:Description>
 			
 			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBox">
@@ -33,10 +33,6 @@
 		<owl:Class rdf:about="#WSO2System">
 			<rdfs:label xml:lang="en">WSO2System</rdfs:label>
 			<rdfs:subClassOf rdf:resource="#Component"/>
-		</owl:Class>
-		<owl:Class rdf:about="#Component">
-			<rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Element"/>
-			<owl:disjointWith rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Composition"/>
 		</owl:Class>
 		<xsl:comment>  === Generated Classes === </xsl:comment>
 		<xsl:apply-templates/>
