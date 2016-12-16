@@ -6,6 +6,7 @@
 	<xsl:variable name="classList" select="'#Unknown'"/>
 	<xsl:template match="/wso2:definitions">
 		<rdf:RDF xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1">
+	
 			<xsl:text/>
 			<xsl:comment> Dublin Core Meta Data</xsl:comment>
 			<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABox">
@@ -20,7 +21,9 @@
 			<xsl:apply-templates/>
 		</rdf:RDF>
 	</xsl:template>
-	<!-- 1. level indivdual assertion  -->
+
+
+	<!-- Indivdual assertion  -->
 	<xsl:template match="//text()"/>
 	<xsl:template match="*">
 		<xsl:call-template name="selectType"/>
@@ -44,6 +47,9 @@
 	<xsl:template match="*/*/*/*/*/*">
 		<xsl:call-template name="selectType"/>
 	</xsl:template>
+	
+	
+	
 	<xsl:template name="selectType">
 		<xsl:choose>
 			<xsl:when test="fn:exists(@name)">
@@ -60,16 +66,24 @@
 				<xsl:call-template name="individualTemplate">
 					<xsl:with-param name="argType" select="@key"/>
 				</xsl:call-template>
+				</xsl:when>
+			<xsl:when test="fn:exists(@provider)">
+				<xsl:call-template name="individualTemplate">
+					<xsl:with-param name="argType" select="@provider"/>
+				</xsl:call-template>
 			</xsl:when>
 		</xsl:choose>
 	</xsl:template>
+	
 	<xsl:template name="individualTemplate">
 		<xsl:param name="argType"/>
+
 		<!-- Prepare the new class name  -->
 		<xsl:variable name="actualName" select="fn:local-name()"/>
 		<xsl:variable name="letter" select="fn:upper-case(fn:substring($actualName,1,1))"/>
 		<xsl:variable name="rest" select="fn:substring ($actualName,2)"/>
 		<xsl:variable name="className" select="fn:concat('#',$letter,$rest,'Class')"/>
+	
 		<xsl:if test="fn:not($argType = ' ') and fn:exists($className)">
 			<!-- Assert the indivuduals to classes  -->
 			<owl:NamedIndividual>

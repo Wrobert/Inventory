@@ -56,15 +56,18 @@
 		<xsl:call-template name="classTemplate"/>
 	</xsl:template>
 
-	<!-- Template as Subroutine -->
+	<!-- Template as XSLT Subroutine -->
 	<xsl:template name="classTemplate">
+
 		<!-- Prepare the super class name list -->
 		<xsl:variable name="systemList" select="'#On-failClass, #InClass, #OutClass, #InputClass, #OutputClass, #SchemaClass, #ResourceClass, #PublishWSDLClass, #TargetClass, #TaskManagerClass, #ParameterClass, #RegistryClass, #DescriptionClass, #With-paramClass, #ParameterClass, #ParametersClass'"/>
 		<xsl:variable name="processList" select="'#SequenceClass, #TemplateClass, #InSequenceClass, #OutSequenceClass, #FaultSequenceClass, #Call-templateClass'"/>
 		<xsl:variable name="serviceCompositionList" select="'#ProxyClass'"/>
+		
 		<xsl:variable name="mediatorList" select="'#EndpointClass, #HeaderClass, #FilterClass, #CallClass, #SmooksClass, #DropClass, #SendClass, #ValidateClass, #LogClass, #PropertyClass, #XsltClass, #MessageStoreClass, #MessageProcessorClass, #InboundEndpointClass'"/>
+
+
 		<xsl:for-each select="*">
-			<!-- Filter multiple nodes; do not need the first one -->
 			<xsl:variable name="actualName" select="fn:local-name()"/>
 			<!-- Prepare the new class name  -->
 			<xsl:variable name="rest" select="fn:substring ($actualName,2)"/>
@@ -72,17 +75,7 @@
 			<xsl:variable name="className" select="fn:concat('#',$letter,$rest,'Class')"/>
 			<xsl:if test="fn:not($className = '#Class')">
 				<!-- Check the class list for already known -->
-				<xsl:if test="fn:not(
-					fn:contains(
-						fn:concat(', ', fn:normalize-space($classList), ', '), 
-						fn:concat(', ', $className, ', '))
-					)">
-					<!-- If not: Add the class name to the list -->
-					<!-- xsl:comment>
-						<xsl:value-of select="$classList"/>
-						<xsl:value-of select="$className"/>
-						<xsl:value-of select="fn:concat($classList,', ',$className)"/>
-					</xsl:comment> -->
+	
 					<!-- Generate TBox  -->
 					<owl:Class>
 						<xsl:attribute name="rdf:about"><xsl:value-of select="$className"/></xsl:attribute>
@@ -115,7 +108,7 @@
 							</xsl:attribute>
 						</rdfs:subClassOf>
 					</owl:Class>
-				</xsl:if>
+
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
