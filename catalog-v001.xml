@@ -3,10 +3,9 @@
     <uri id="User Entered Import Resolution" name="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl" uri="soa.rdf"/>
     <uri id="Imports Wizard Entry" name="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBox" uri="wso2TBox.rdf"/>
     <group id="Folder Repository, directory=, recursive=true, Auto-Update=true, version=2" prefer="public" xml:base="">
-        <uri id="Automatically generated entry, Timestamp=1481900605219" name="duplicate:http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" uri="wso2ABox.rdf"/>
-        <uri id="Automatically generated entry, Timestamp=1481900605219" name="duplicate:http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" uri="wso2TBox.rdf"/>
-        <uri id="Automatically generated entry, Timestamp=1481900605219" name="duplicate:http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" uri="XSL%20Output.rdf"/>
-        <uri id="Automatically generated entry, Timestamp=1481900605219" name="duplicate:http://www.semanticweb.org/ontologies/2010/01/core-soa.owl" uri="soa.owl"/>
-        <uri id="Automatically generated entry, Timestamp=1481900605219" name="duplicate:http://www.semanticweb.org/ontologies/2010/01/core-soa.owl" uri="soa.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1481904992062" name="duplicate:http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" uri="wso2TBox.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1481904992062" name="duplicate:http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" uri="XSL%20Output.rdf"/>
+        <uri id="Automatically generated entry, Timestamp=1481904992062" name="duplicate:http://www.semanticweb.org/ontologies/2010/01/core-soa.owl" uri="soa.owl"/>
+        <uri id="Automatically generated entry, Timestamp=1481904992062" name="duplicate:http://www.semanticweb.org/ontologies/2010/01/core-soa.owl" uri="soa.rdf"/>
     </group>
 </catalog>
