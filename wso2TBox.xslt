@@ -20,19 +20,21 @@
 				<owl:imports rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl"/>
 			</owl:Ontology>
 			<xsl:comment> === Constant Super Classes === </xsl:comment>
-		<owl:Class rdf:about="#Unknown">
-			<rdfs:label xml:lang="en">Unknown</rdfs:label>
+		<owl:Class rdf:about="#UnknownClass">
+			<rdfs:label xml:lang="en">UnknownClass</rdfs:label>
 		</owl:Class>
-		<owl:Class rdf:about="#Component">
-			<rdfs:label xml:lang="en">Component</rdfs:label>
+		<owl:Class rdf:about="#ComponentClass">
+	        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Element"/>
+			<rdfs:label xml:lang="en">ComponentClass</rdfs:label>
+	        <owl:disjointWith rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Composition"/>
 		</owl:Class>
-		<owl:Class rdf:about="#Mediator">
-			<rdfs:label xml:lang="en">Mediator</rdfs:label>
-			<rdfs:subClassOf rdf:resource="#Component"/>
+		<owl:Class rdf:about="#MediatorClass">
+			<rdfs:label xml:lang="en">MediatorClass</rdfs:label>
+			<rdfs:subClassOf rdf:resource="#ComponentClass"/>
 		</owl:Class>
-		<owl:Class rdf:about="#WSO2System">
-			<rdfs:label xml:lang="en">WSO2System</rdfs:label>
-			<rdfs:subClassOf rdf:resource="#Component"/>
+		<owl:Class rdf:about="#WSO2SystemClass">
+			<rdfs:label xml:lang="en">WSO2SystemClass</rdfs:label>
+			<rdfs:subClassOf rdf:resource="#ComponentClass"/>
 		</owl:Class>
 		<xsl:comment>  === Generated Classes === </xsl:comment>
 		<xsl:apply-templates/>
@@ -96,10 +98,10 @@
 										<xsl:text>http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#ServiceComposition</xsl:text>
 									</xsl:when>
 									<xsl:when test=" fn:contains(fn:concat(', ', fn:normalize-space($mediatorList), ', '), fn:concat(', ', $className, ', ')) ">
-										<xsl:text>#Mediator</xsl:text>
+										<xsl:text>#MediatorClass</xsl:text>
 									</xsl:when>
 									<xsl:when test=" fn:contains(fn:concat(', ', fn:normalize-space($systemList), ', '), fn:concat(', ', $className, ', ')) ">
-										<xsl:text>#WSO2System</xsl:text>
+										<xsl:text>#WSO2SystemClass</xsl:text>
 									</xsl:when>
 									<xsl:otherwise>
 										<xsl:text>#Unknown</xsl:text>
