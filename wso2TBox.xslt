@@ -36,6 +36,24 @@
 			<rdfs:label xml:lang="en">WSO2SystemClass</rdfs:label>
 			<rdfs:subClassOf rdf:resource="#ComponentClass"/>
 		</owl:Class>
+
+		<xsl:comment> === Define Complex Classes == </xsl:comment>
+		 <owl:Class rdf:about="http://www.bls.ch/ontologies/ticketAccounting.owl#XMLnodeClass">
+			<owl:equivalentClass>
+				<owl:Class>
+					<owl:intersectionOf rdf:parseType="Collection">
+						<rdf:Description rdf:about="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Element"/>
+						<owl:Class>
+							<owl:unionOf rdf:parseType="Collection">
+								<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#ComponentClass"/>
+								<rdf:Description rdf:about="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Composition"/>
+							</owl:unionOf>
+						</owl:Class>
+					</owl:intersectionOf>
+				</owl:Class>
+			</owl:equivalentClass>
+		</owl:Class>		
+		
 		<xsl:comment>  === Generated Classes === </xsl:comment>
 		<xsl:apply-templates/>
 	</rdf:RDF>
