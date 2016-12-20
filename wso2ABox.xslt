@@ -6,7 +6,7 @@
 		<rdf:RDF xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1">
 	
 			<xsl:text/>
-			<xsl:comment> Dublin Core Meta Data</xsl:comment>
+			<xsl:comment> === Dublin Core Meta Data === </xsl:comment>
 			<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABox">
 				<dc:creator>Robert Wydler</dc:creator>
 				<dc:title>WSO2 ABox</dc:title>
@@ -23,33 +23,28 @@
 
 	<xsl:template match="//text()"/>
 
-	<!-- Indivdual assertion  -->
+	<!-- Indivdual assertion  = f(type); only compositions are able to call templates (except 1st level)-->
 	<xsl:template match="wso2:definitions">
 		<xsl:call-template name="selectType"/>
 		<xsl:apply-templates/>
 	</xsl:template>
-	<!-- xsl:template match="*/*">
+	<xsl:template match="wso2:definitions/wso2:sequence">
 		<xsl:call-template name="selectType"/>
 		<xsl:apply-templates/>
 	</xsl:template>
-	<xsl:template match="*/*/*">
+	<xsl:template match="wso2:definitions/wso2:template/wso2:sequence">
 		<xsl:call-template name="selectType"/>
 		<xsl:apply-templates/>
 	</xsl:template>
-	<xsl:template match="*/*/*/*">
+	<xsl:template match="wso2:definitions/wso2:proxy/wso2:target/wso2:inSequence">
 		<xsl:call-template name="selectType"/>
 		<xsl:apply-templates/>
 	</xsl:template>
-	<xsl:template match="*/*/*/*/*">
-		<xsl:call-template name="selectType"/>
-	</xsl:template>
-	<xsl:template match="*/*/*/*/*/*">
-		<xsl:call-template name="selectType"/>
-	</xsl:template-->
-	
 	
 	
 	<xsl:template name="selectType">
+				<xsl:text/>
+				<xsl:comment> === Assertion Individuals === </xsl:comment>
 				<xsl:for-each select="*">
 						<xsl:call-template name="individualTemplate">
 							<xsl:with-param name="argType" select="@name"/>
@@ -60,33 +55,23 @@
 						<xsl:call-template name="individualTemplate">
 							<xsl:with-param name="argType" select="@description"/>
 						</xsl:call-template>
+						<xsl:call-template name="individualTemplate">
+							<xsl:with-param name="argType" select="@config-key"/>
+						</xsl:call-template>
+						<xsl:call-template name="individualTemplate">
+							<xsl:with-param name="argType" select="@key"/>
+						</xsl:call-template>
 				</xsl:for-each>
-	
-<!-- xsl:when test="fn:exists(@description)">
-				<xsl:call-template name="individualTemplate">
-					<xsl:with-param name="argType" select="@description"/>
-				</xsl:call-template>
-			</xsl:when>
-			<xsl:when test="fn:exists(@key)">
-				<xsl:call-template name="individualTemplate">
-					<xsl:with-param name="argType" select="@key"/>
-				</xsl:call-template>
-				</xsl:when>
-			<xsl:when test="fn:exists(@provider)">
-				<xsl:call-template name="individualTemplate">
-					<xsl:with-param name="argType" select="@provider"/>
-				</xsl:call-template>
-			</xsl:when-->
 	</xsl:template>
 	
 	<xsl:template name="individualTemplate">
 		<xsl:param name="argType"/>
+		<!-- Prepare the new class name  -->
+		<xsl:variable name="actualName" select="fn:local-name()"/>
+		<xsl:variable name="letter" select="fn:upper-case(fn:substring($actualName,1,1))"/>
+		<xsl:variable name="rest" select="fn:substring ($actualName,2)"/>
+		<xsl:variable name="className" select="fn:concat('#',$letter,$rest,'Class')"/>
 		<xsl:if test="fn:string-length($argType) > 0" >
-				<!-- Prepare the new class name  -->
-			<xsl:variable name="actualName" select="fn:local-name()"/>
-			<xsl:variable name="letter" select="fn:upper-case(fn:substring($actualName,1,1))"/>
-			<xsl:variable name="rest" select="fn:substring ($actualName,2)"/>
-			<xsl:variable name="className" select="fn:concat('#',$letter,$rest,'Class')"/>
 			<!-- Assert the indivuduals to classes  -->
 			<owl:NamedIndividual>
 				<xsl:attribute name="rdf:about"><xsl:value-of select="fn:concat('#',$argType)"/></xsl:attribute>
@@ -98,6 +83,5 @@
 				</rdf:type>
 			</owl:NamedIndividual>
 		</xsl:if>
-		
 	</xsl:template>
 </xsl:stylesheet>
