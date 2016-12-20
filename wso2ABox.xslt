@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:esb="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#">
+<xsl:stylesheet version="2.0"
+	 xmlns:xsl="http://www.w3.org/1999/XSL/Transform" 
+	 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	 xmlns:wso2="http://ws.apache.org/ns/synapse"
+	 xmlns:fn="http://www.w3.org/2005/xpath-functions" 
+	 xmlns:owl="http://www.w3.org/2002/07/owl#" 
+	 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	 xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	 xmlns:tb="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA#"
+	 >
+	 
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="application/rdf+xml"/>
-
 	<xsl:template match="/">
-		<rdf:RDF xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1">
+
+		<rdf:RDF
+			xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA#"
+			xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA#"
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:owl="http://www.w3.org/2002/07/owl#"
+			xmlns:xml="http://www.w3.org/XML/1998/namespace"
+			xmlns:wso2="http://ws.apache.org/ns/synapse"
+			xmlns:fn="http://www.w3.org/2005/xpath-functions"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+			xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:dc="http://purl.org/dc/elements/1.1"
+			xmlns:tb="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA#"
+			>
 	
 			<xsl:text/>
 			<xsl:comment> === Dublin Core Meta Data === </xsl:comment>
-			<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABox">
+			<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA">
 				<dc:creator>Robert Wydler</dc:creator>
 				<dc:title>WSO2 ABox</dc:title>
-				<dc:description>This is the generated WSO2 ABox based on WSO2 ESB configuration</dc:description>
-				<dc:date>2016-12-15</dc:date>
+				<dc:description>This is the generated WSO2 ABox based on WSO2 ESB configuration of the Ticket Accounting Service</dc:description>
+				<dc:date>2016-20</dc:date>
 			</rdf:Description>
-			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABox">
-				<owl:imports rdf:resource="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBox"/>
+			
+			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA">
+				<owl:imports rdf:resource="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA"/>
 			</owl:Ontology>
 			<xsl:apply-templates/>
 		</rdf:RDF>
@@ -79,7 +103,7 @@
 					<xsl:value-of select="$argType" />
 				</rdfs:label>
 				<rdf:type>
-					<xsl:attribute name="rdf:resource"><xsl:value-of select="$className"/></xsl:attribute>
+					<xsl:attribute name="rdf:resource"><xsl:value-of select="fn:concat('http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA',$className)"/></xsl:attribute>
 				</rdf:type>
 			</owl:NamedIndividual>
 		</xsl:if>

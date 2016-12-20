@@ -1,22 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:esb="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#">
+<xsl:stylesheet version="2.0"
+	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:wso2="http://ws.apache.org/ns/synapse"
+	xmlns:fn="http://www.w3.org/2005/xpath-functions"
+	xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	>
 	<xsl:output method="xml" version="1.0" encoding="UTF-8" indent="yes" media-type="application/rdf+xml"/>
-	<!-- Globale Variablen -->
-	<!-- Keep class name  for distinction - NOT IMPLEMENTED YET-->
-	<xsl:variable name="classList" select="'#Unknown'"/>
-
 	<xsl:template match="/">
-		<rdf:RDF xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:xml="http://www.w3.org/XML/1998/namespace" xmlns:wso2="http://ws.apache.org/ns/synapse" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1">
+
+		<rdf:RDF
+			xmlns="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA#"
+			xml:base="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA#"
+			xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+			xmlns:owl="http://www.w3.org/2002/07/owl#"
+			xmlns:xml="http://www.w3.org/XML/1998/namespace"
+			xmlns:wso2="http://ws.apache.org/ns/synapse"
+			xmlns:fn="http://www.w3.org/2005/xpath-functions"
+			xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+			xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema"
+			xmlns:dc="http://purl.org/dc/elements/1.1"
+			>
+		
 		<xsl:text/>
 		<xsl:comment> === Dublin Core Meta Data === </xsl:comment>
 		<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBox">
 			<dc:creator>Robert Wydler</dc:creator>
 			<dc:title>WSO2 TBox</dc:title>
-			<dc:description>This is the generated WSO2 TBox based on WSO2 ESB configuration</dc:description>
-			<dc:date>2016-12-16</dc:date>
+			<dc:description>This is the generated WSO2 TBox based on WSO2 ESB configuration of the Ticket Accounting Service</dc:description>
+			<dc:date>2016-12-20</dc:date>
 		</rdf:Description>
 			
-			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBox">
+			<owl:Ontology rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA">
 				<owl:imports rdf:resource="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl"/>
 			</owl:Ontology>
 			<xsl:comment> === Constant Super Classes === </xsl:comment>
@@ -38,14 +56,14 @@
 		</owl:Class>
 
 		<xsl:comment> === Define Complex Classes == </xsl:comment>
-		 <owl:Class rdf:about="http://www.bls.ch/ontologies/ticketAccounting.owl#XMLnodeClass">
+		 <owl:Class rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA#XMLnodeClass">
 			<owl:equivalentClass>
 				<owl:Class>
 					<owl:intersectionOf rdf:parseType="Collection">
 						<rdf:Description rdf:about="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Element"/>
 						<owl:Class>
 							<owl:unionOf rdf:parseType="Collection">
-								<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/ESB#ComponentClass"/>
+								<rdf:Description rdf:about="http://www.bls.ch/soa/ontologies/wso2/2016/12/TBoxTA#ComponentClass"/>
 								<rdf:Description rdf:about="http://www.semanticweb.org/ontologies/2010/01/core-soa.owl#Composition"/>
 							</owl:unionOf>
 						</owl:Class>
@@ -83,7 +101,6 @@
 		<xsl:variable name="systemList" select="'#On-failClass, #InClass, #OutClass, #InputClass, #OutputClass, #SchemaClass, #ResourceClass, #PublishWSDLClass, #TargetClass, #TaskManagerClass, #ParameterClass, #RegistryClass, #DescriptionClass, #With-paramClass, #ParameterClass, #ParametersClass'"/>
 		<xsl:variable name="processList" select="'#SequenceClass, #TemplateClass, #InSequenceClass, #OutSequenceClass, #FaultSequenceClass, #Call-templateClass'"/>
 		<xsl:variable name="serviceCompositionList" select="'#ProxyClass'"/>
-		
 		<xsl:variable name="mediatorList" select="'#EndpointClass, #HeaderClass, #FilterClass, #CallClass, #SmooksClass, #DropClass, #SendClass, #ValidateClass, #XsltClass, #MessageStoreClass, #MessageProcessorClass, #InboundEndpointClass'"/>
 
 
@@ -128,7 +145,6 @@
 							</xsl:attribute>
 						</rdfs:subClassOf>
 					</owl:Class>
-
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
