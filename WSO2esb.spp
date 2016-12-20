@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
 	<Folder FolderName="XML Files" ExtStr="xml;cml;math;rdf;smil;svg;wml">
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\wso2ABox.rdf" HomeFolder="Yes"/>
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\Wso2Esb5Config.xml" HomeFolder="Yes"/>
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\wso2TBox.rdf" HomeFolder="Yes"/>
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\wso2TBox.xslt"/>
+		<File FilePath="Wso2Esb5Config.xml" HomeFolder="Yes"/>
+		<File FilePath="wso2TBox.rdf" HomeFolder="Yes"/>
 	</Folder>
 	<Folder FolderName="XSL Files" ExtStr="xsl;xslt">
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\wso2ABox.xslt" HomeFolder="Yes"/>
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\wso2RBox.xslt" HomeFolder="Yes"/>
-		<File FilePath="C:\Users\Robert\OneDrive\BLS\2016-12-16-ESB-Inventar\wso2TBox.xslt" HomeFolder="Yes"/>
+		<File FilePath="wso2ABox.xslt" HomeFolder="Yes"/>
+		<File FilePath="wso2RBox.xslt" HomeFolder="Yes"/>
+		<File FilePath="wso2TBox.xslt" HomeFolder="Yes"/>
 	</Folder>
 	<Folder FolderName="XQuery Files" ExtStr="xq;xql;xquery;xqu"/>
 	<Folder FolderName="HTML Files" ExtStr="html;htm;xhtml;asp"/>

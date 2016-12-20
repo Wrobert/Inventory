@@ -84,7 +84,7 @@
 		<xsl:variable name="processList" select="'#SequenceClass, #TemplateClass, #InSequenceClass, #OutSequenceClass, #FaultSequenceClass, #Call-templateClass'"/>
 		<xsl:variable name="serviceCompositionList" select="'#ProxyClass'"/>
 		
-		<xsl:variable name="mediatorList" select="'#EndpointClass, #HeaderClass, #FilterClass, #CallClass, #SmooksClass, #DropClass, #SendClass, #ValidateClass, #LogClass, #PropertyClass, #XsltClass, #MessageStoreClass, #MessageProcessorClass, #InboundEndpointClass'"/>
+		<xsl:variable name="mediatorList" select="'#EndpointClass, #HeaderClass, #FilterClass, #CallClass, #SmooksClass, #DropClass, #SendClass, #ValidateClass, #XsltClass, #MessageStoreClass, #MessageProcessorClass, #InboundEndpointClass'"/>
 
 
 		<xsl:for-each select="*">
@@ -122,7 +122,7 @@
 										<xsl:text>#WSO2SystemClass</xsl:text>
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:text>#Unknown</xsl:text>
+										<xsl:text>#UnknownClass</xsl:text>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:attribute>
