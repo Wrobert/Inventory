@@ -84,132 +84,85 @@
 	<xsl:template match="wso2:definitions">
 		<xsl:text/>
 		<xsl:comment> === First Level Dependency === </xsl:comment>
-			<xsl:for-each select="*">
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../fn:local-name()"  />
-					<xsl:with-param name="argTarget" select="@name"/>
-				</xsl:call-template>
-			</xsl:for-each>
+			<xsl:call-template name="selectType">
+				<xsl:with-param name="source" select="fn:local-name()"  />
+			</xsl:call-template>
 		<xsl:apply-templates/>
 	</xsl:template>
-
-	<xsl:template match="/wso2:definitions/wso2:sequence">
+	<!-- Sequence Property Assertion -->
+	<xsl:template match="wso2:definitions/wso2:sequence">
 		<xsl:text/>
-		<xsl:comment> === Sequence Level Dependency === </xsl:comment>
-			<xsl:for-each select="*">
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../@name"  />
-					<xsl:with-param name="argTarget" select="@config-key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../@name"  />
-					<xsl:with-param name="argTarget" select="@name"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../@name"  />
-					<xsl:with-param name="argTarget" select="@description"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../@name"  />
-					<xsl:with-param name="argTarget" select="@key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../@name"  />
-					<xsl:with-param name="argTarget" select="@provider"/>
-				</xsl:call-template>
-			</xsl:for-each>
+		<xsl:comment> === Sequence Property Assertion === </xsl:comment>
+			<xsl:call-template name="selectType">
+				<xsl:with-param name="source" select="@name"  />
+			</xsl:call-template>
 		<xsl:apply-templates/>
 	</xsl:template>
-
-	<xsl:template match="/wso2:definitions/wso2:template">
+	<!-- Template Property Assertion -->
+	<xsl:template match="wso2:definitions/wso2:template/wso2:sequence">
 		<xsl:text/>
-		<xsl:comment> === Template Level Dependency === </xsl:comment>
-			<xsl:for-each select="*">
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../@name"  />
-					<xsl:with-param name="argTarget" select="@config-key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../@name"  />
-					<xsl:with-param name="argTarget" select="@name"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../@name"  />
-					<xsl:with-param name="argTarget" select="@description"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../@name"  />
-					<xsl:with-param name="argTarget" select="@key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../@name"  />
-					<xsl:with-param name="argTarget" select="@provider"/>
-				</xsl:call-template>
-			</xsl:for-each>
+		<xsl:comment> === Template Property Assertion === </xsl:comment>
+			<xsl:call-template name="selectType">
+				<xsl:with-param name="source" select="../@name"  />
+			</xsl:call-template>
 		<xsl:apply-templates/>
 	</xsl:template>
-
-	<xsl:template match="/wso2:definitions/wso2:proxy/*/*">
+	<!-- Proxy Property Assertion -->
+	<xsl:template match="wso2:definitions/wso2:proxy/wso2:target/wso2:inSequence">
 		<xsl:text/>
-		<xsl:comment> === Proxy Level Dependency === </xsl:comment>
-			<xsl:for-each select="*">
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../../@name"  />
-					<xsl:with-param name="argTarget" select="@config-key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../../@name"  />
-					<xsl:with-param name="argTarget" select="@name"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../../@name"  />
-					<xsl:with-param name="argTarget" select="@description"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../../@name"  />
-					<xsl:with-param name="argTarget" select="@key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="../../../@name"  />
-					<xsl:with-param name="argTarget" select="@provider"/>
-				</xsl:call-template>
-			</xsl:for-each>
+		<xsl:comment> === Proxy Property Assertion === </xsl:comment>
+			<xsl:call-template name="selectType">
+				<xsl:with-param name="source" select="../../@name"  />
+			</xsl:call-template>
 		<xsl:apply-templates/>
 	</xsl:template>
 
-	
 	<xsl:template name="selectType">
-		<xsl:param name="argType"/>
-			<xsl:for-each select="*">
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="@name"  />
-					<xsl:with-param name="argTarget" select="$argType"/>
-				</xsl:call-template>
-				<!-- xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="/wso2:definitions/wso2:proxy/@name"  />
-					<xsl:with-param name="argTarget" select="@name"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="/wso2:definitions/wso2:proxy/@name"  />
-					<xsl:with-param name="argTarget" select="@description"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="/wso2:definitions/wso2:proxy/@name"  />
-					<xsl:with-param name="argTarget" select="@key"/>
-				</xsl:call-template>
-				<xsl:call-template name="roleTemplate">
-					<xsl:with-param name="argSource" select="/wso2:definitions/wso2:proxy/@name"  />
-					<xsl:with-param name="argTarget" select="@provider"/>
-				</xsl:call-template -->
-			</xsl:for-each>
+		<xsl:param name="source"/>
+			<xsl:if test="fn:exists($source)">
+				<xsl:for-each select="*">
+					<xsl:choose>
+						<xsl:when test="@name">
+							<xsl:call-template name="roleTemplate">
+								<xsl:with-param name="argSource" select="$source"/>
+								<xsl:with-param name="argTarget" select="@name"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@provider">
+							<xsl:call-template name="roleTemplate">
+								<xsl:with-param name="argSource" select="$source"/>
+								<xsl:with-param name="argTarget" select="@provider"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@description">
+							<xsl:call-template name="roleTemplate">
+								<xsl:with-param name="argSource" select="$source"/>
+								<xsl:with-param name="argTarget" select="@description"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@key">
+							<xsl:call-template name="roleTemplate">
+								<xsl:with-param name="argSource" select="$source"/>
+								<xsl:with-param name="argTarget" select="@key"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@config-key">
+							<xsl:call-template name="roleTemplate">
+								<xsl:with-param name="argSource" select="$source"/>
+								<xsl:with-param name="argTarget" select="@config-key"/>
+							</xsl:call-template>
+						</xsl:when>
+					</xsl:choose>
+				</xsl:for-each>
+			</xsl:if>
 	</xsl:template>
-
+	
+	<!-- Assert individuals to properties -->
 	<xsl:template name="roleTemplate">
 		<xsl:param name="argSource"/>
 		<xsl:param name="argTarget"/>
-			<!-- Assert individuals to properties -->
 			<xsl:for-each select="$argTarget">
-			<xsl:if test="fn:exists($argSource)">
+			<xsl:if test="fn:exists($argSource) and fn:exists($argTarget)">
 				<owl:NamedIndividual>
 					<xsl:attribute name="rdf:about">
  						<xsl:value-of select="fn:concat('http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA#',$argSource)"/>
@@ -223,4 +176,23 @@
 			</xsl:if>
 		</xsl:for-each>
 	</xsl:template>
+
+	<!-- Assert Indivdual to call property -->
+	<xsl:template match="//wso2:call-template ">
+		<xsl:text/>
+		<xsl:comment> === Call-Template === </xsl:comment>
+				<owl:NamedIndividual>
+					<xsl:attribute name="rdf:about">
+ 						<xsl:value-of select="fn:concat('http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA#',@description)"/>
+					</xsl:attribute>
+					<tr:calls>
+						<xsl:attribute name="rdf:resource">
+							<xsl:value-of select="fn:concat('http://www.bls.ch/soa/ontologies/wso2/2016/12/ABoxTA#',@target)"/>
+						</xsl:attribute>
+					</tr:calls>
+				</owl:NamedIndividual>
+		<xsl:apply-templates/>
+	</xsl:template>
 </xsl:stylesheet>
+
+

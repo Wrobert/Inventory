@@ -49,42 +49,59 @@
 
 	<!-- Indivdual assertion  = f(type); only compositions are able to call templates (except 1st level)-->
 	<xsl:template match="wso2:definitions">
-		<xsl:call-template name="selectType"/>
-		<xsl:apply-templates/>
-	</xsl:template>
-	<xsl:template match="wso2:definitions/wso2:sequence">
-		<xsl:call-template name="selectType"/>
-		<xsl:apply-templates/>
-	</xsl:template>
-	<xsl:template match="wso2:definitions/wso2:template/wso2:sequence">
+		<xsl:text/>
+		<xsl:comment> === Assertion 1st Level Individuals === </xsl:comment>
 		<xsl:call-template name="selectType"/>
 		<xsl:apply-templates/>
 	</xsl:template>
 	<xsl:template match="wso2:definitions/wso2:proxy/wso2:target/wso2:inSequence">
+		<xsl:text/>
+		<xsl:comment> === Assertion Proxy Level Individuals === </xsl:comment>
+		<xsl:call-template name="selectType"/>
+		<xsl:apply-templates/>
+	</xsl:template>
+	<xsl:template match="wso2:definitions/wso2:template/wso2:sequence">
+		<xsl:text/>
+		<xsl:comment> === Assertion Template Level Individuals === </xsl:comment>
+		<xsl:call-template name="selectType"/>
+		<xsl:apply-templates/>
+	</xsl:template>
+	<xsl:template match="wso2:definitions/wso2:sequence">
+		<xsl:text/>
+		<xsl:comment> === Assertion Sequence Level Individuals === </xsl:comment>
 		<xsl:call-template name="selectType"/>
 		<xsl:apply-templates/>
 	</xsl:template>
 	
-	
 	<xsl:template name="selectType">
-				<xsl:text/>
-				<xsl:comment> === Assertion Individuals === </xsl:comment>
 				<xsl:for-each select="*">
-						<xsl:call-template name="individualTemplate">
-							<xsl:with-param name="argType" select="@name"/>
-						</xsl:call-template>
-						<xsl:call-template name="individualTemplate">
-							<xsl:with-param name="argType" select="@provider"/>
-						</xsl:call-template>
-						<xsl:call-template name="individualTemplate">
-							<xsl:with-param name="argType" select="@description"/>
-						</xsl:call-template>
-						<xsl:call-template name="individualTemplate">
-							<xsl:with-param name="argType" select="@config-key"/>
-						</xsl:call-template>
-						<xsl:call-template name="individualTemplate">
-							<xsl:with-param name="argType" select="@key"/>
-						</xsl:call-template>
+					<xsl:choose>
+						<xsl:when test="@name">
+							<xsl:call-template name="individualTemplate">
+								<xsl:with-param name="argType" select="@name"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@provider">
+							<xsl:call-template name="individualTemplate">
+								<xsl:with-param name="argType" select="@provider"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@description">
+							<xsl:call-template name="individualTemplate">
+								<xsl:with-param name="argType" select="@description"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@key">
+							<xsl:call-template name="individualTemplate">
+								<xsl:with-param name="argType" select="@key"/>
+							</xsl:call-template>
+						</xsl:when>
+						<xsl:when test="@config-key">
+							<xsl:call-template name="individualTemplate">
+								<xsl:with-param name="argType" select="@config-key"/>
+							</xsl:call-template>
+						</xsl:when>
+					</xsl:choose>
 				</xsl:for-each>
 	</xsl:template>
 	
